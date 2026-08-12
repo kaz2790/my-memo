@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自分専用のAIメモアプリ</title>
+</head>
+
+<body>
+
+  <h1>自分専用のAIメモアプリ</h1>
+
+  <p>今日のメモ</p>
+
+  <textarea
+    id="memo"
+    rows="10"
+    cols="40"
+    placeholder="ここにメモを入力してください"
+  ></textarea>
+
+  <br><br>
+
+  <button onclick="saveMemo()">メモを保存</button>
+
+  <p id="message"></p>
+
+  <script>
+    function saveMemo() {
+      const memo = document.getElementById("memo").value;
+
+      if (memo.trim() === "") {
+        document.getElementById("message").textContent =
+          "メモを入力してください。";
+        return;
+      }
+
+      localStorage.setItem("memo", memo);
+
+      document.getElementById("message").textContent =
+        "メモを保存しました。";
+    }
+  </script>
+
+</body>
+</html>
