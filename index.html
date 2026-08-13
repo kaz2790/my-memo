@@ -24,7 +24,8 @@
   <button onclick="saveMemo()">メモを保存</button>
 
   <p id="message"></p>
-
+<h2>保存したメモ</h2>
+<div id="savedMemo"></div>
   <script>
     function saveMemo() {
       const memo = document.getElementById("memo").value;
@@ -36,7 +37,7 @@
       }
 
       localStorage.setItem("memo", memo);
-
+document.getElementById("savedMemo").textContent = memo;
       document.getElementById("message").textContent =
         "メモを保存しました。";
     }
