@@ -28,19 +28,28 @@
 <div id="savedMemo"></div>
   <script>
     function saveMemo() {
-      const memo = document.getElementById("memo").value;
+    const memo = document.getElementById("memo").value;
 
-      if (memo.trim() === "") {
+    if (memo.trim() === "") {
         document.getElementById("message").textContent =
-          "メモを入力してください。";
+            "メモを入力してください。";
         return;
-      }
-
-      localStorage.setItem("memo", memo);
-document.getElementById("savedMemo").textContent = memo;
-      document.getElementById("message").textContent =
-        "メモを保存しました。";
     }
+
+    localStorage.setItem("memo", memo);
+
+    document.getElementById("savedMemo").textContent = memo;
+    document.getElementById("message").textContent =
+        "メモを保存しました。";
+}
+
+window.onload = function() {
+    const savedMemo = localStorage.getItem("memo");
+
+    if (savedMemo) {
+        document.getElementById("savedMemo").textContent = savedMemo;
+    }
+};
   </script>
 
 </body>
