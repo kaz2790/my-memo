@@ -26,8 +26,8 @@
   <p id="message"></p>
 <h2>保存したメモ</h2>
 <div id="savedMemo"></div>
-  <script>
-    function saveMemo() {
+<script>
+function saveMemo() {
     const memo = document.getElementById("memo").value;
 
     if (memo.trim() === "") {
@@ -36,21 +36,36 @@
         return;
     }
 
-    localStorage.setItem("memo", memo);
+    let memos = JSON.parse(localStorage.getItem("memos") || "[]");
 
-    document.getElementById("savedMemo").textContent = memo;
+    memos.push(memo);
+
+    localStorage.setItem("memos", JSON.stringify(memos));
+
     document.getElementById("message").textContent =
         "メモを保存しました。";
+
+    displayMemos();
+}
+
+function displayMemos() {
+    const savedMemo = document.getElementById("savedMemo");
+
+    let memos = JSON.parse(localStorage.getItem("memos") || "[]");
+
+    savedMemo.innerHTML = "";
+
+    memos.forEach(function(memo) {
+        const p = document.createElement("p");
+        p.textContent = memo;
+        savedMemo.appendChild(p);
+    });
 }
 
 window.onload = function() {
-    const savedMemo = localStorage.getItem("memo");
-
-    if (savedMemo) {
-        document.getElementById("savedMemo").textContent = savedMemo;
-    }
+    displayMemos();
 };
-  </script>
+</script>
 
 </body>
 </html>
