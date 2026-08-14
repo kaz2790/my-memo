@@ -38,10 +38,14 @@ function saveMemo() {
 
     let memos = JSON.parse(localStorage.getItem("memos") || "[]");
 
-    memos.push(memo);
+const newMemo = {
+    text: memo,
+    createdAt: new Date().toLocaleString()
+};
 
-    localStorage.setItem("memos", JSON.stringify(memos));
+memos.push(newMemo);
 
+localStorage.setItem("memos", JSON.stringify(memos));
     document.getElementById("message").textContent =
         "メモを保存しました。";
 
@@ -56,39 +60,69 @@ function displayMemos() {
     savedMemo.innerHTML = "";
 
     memos.forEach(function(memo, index) {
-    const div = document.createElement("div");
+        const div = document.createElement("div");
 
-    const p = document.createElement("p");
-    p.textContent = memo;
+        const memoText =
+            typeof memo === "string" ? memo : memo.text;
 
-    const editButton = document.createElement("button");
-    editButton.textContent = "編集";
+        const createdAt =
+            typeof memo === "string" ? "保存日時なし" : memo.createdAt;
 
-    editButton.onclick = function() {
-        const newMemo = prompt("メモを編集してください", memo);
+        const p = document.createElement("p");
+        p.textContent = memoText;
 
-        if (newMemo !== null && newMemo.trim() !== "") {
-            memos[index] = newMemo;
-            localStorage.setItem("memos", JSON.stringify(memos));
+        const date = document.createElement("p");
+        date.textContent = createdAt;
+
+        const editButton = document.createElement("button");
+        editButton.textContent = "編集";
+
+        editButton.onclick = function() {
+            const newMemo = prompt(
+                "メモを編集してください",
+                memoText
+            );
+
+            if (newMemo !== null && newMemo.trim() !== "") {
+                if (typeof memo === "string") {
+                    memos[index] = {
+                        text: newMemo,
+                        createdAt: "保存日時なし"
+                    };
+                } else {
+                    memos[index].text = newMemo;
+                }
+
+                localStorage.setItem(
+                    "memos",
+                    JSON.stringify(memos)
+                );
+
+                displayMemos();
+            }
+        };
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "削除";
+
+        deleteButton.onclick = function() {
+            memos.splice(index, 1);
+
+            localStorage.setItem(
+                "memos",
+                JSON.stringify(memos)
+            );
+
             displayMemos();
-        }
-    };
+        };
 
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "削除";
+        div.appendChild(p);
+        div.appendChild(date);
+        div.appendChild(editButton);
+        div.appendChild(deleteButton);
 
-    deleteButton.onclick = function() {
-        memos.splice(index, 1);
-        localStorage.setItem("memos", JSON.stringify(memos));
-        displayMemos();
-    };
-
-    div.appendChild(p);
-    div.appendChild(editButton);
-    div.appendChild(deleteButton);
-
-    savedMemo.appendChild(div);
-});
+        savedMemo.appendChild(div);
+    });
 }
 
 window.onload = function() {
