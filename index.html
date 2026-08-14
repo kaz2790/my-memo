@@ -24,6 +24,11 @@
   <button onclick="saveMemo()">メモを保存</button>
 
   <p id="message"></p>
+  <input
+  type="text"
+  id="searchMemo"
+  placeholder="メモを検索..."
+>
 <h2>保存したメモ</h2>
 <div id="savedMemo"></div>
 <script>
@@ -58,13 +63,15 @@ function displayMemos() {
     let memos = JSON.parse(localStorage.getItem("memos") || "[]");
 
     savedMemo.innerHTML = "";
-
+const searchText = document.getElementById("searchMemo").value.toLowerCase();
     memos.forEach(function(memo, index) {
         const div = document.createElement("div");
 
         const memoText =
             typeof memo === "string" ? memo : memo.text;
-
+if (!memoText.toLowerCase().includes(searchText)) {
+  return;
+}
         const createdAt =
             typeof memo === "string" ? "保存日時なし" : memo.createdAt;
 
@@ -127,6 +134,7 @@ function displayMemos() {
 
 window.onload = function() {
     displayMemos();
+  document.getElementById("searchMemo").addEventListener("input", displayMemos);
 };
 </script>
 
